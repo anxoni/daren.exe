@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <style>
+       body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #7654b7;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .top-search-container {
+            position: relative;
+            height: 8%;
+            width: 100%;
+            background-color: rgba(87, 73, 114, 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            border-bottom: 2px solid #463c63;
+            z-index: 1000;
+        }
+
+        #search-input-top {
+            width: 40%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            background-color: #fff;
+            color: #574972;
+        }
+
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            display: none;
+        }
+
+        .autocomplete-item {
+            padding: 8px;
+            cursor: pointer;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .autocomplete-item:hover {
+            background-color: #ddd;
+        }
+
+        #map-container {
+            position: relative;
+            flex: 1;
+            border: 10px solid #574972;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        #bottom-tab-container {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(87, 73, 114, 1);
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+            height: 10%;
+            width: 20%;
+            transition: height 0.5s;
+            opacity: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        #bottom-tab-container button {
+    width: 20%; /* Set the width as a percentage or pixel value */
+    height: 50%; /* Set the height as a percentage or pixel value */
+    font-size: 14px;
+    padding: 10px; /* Adjust padding if necessary */
+}
+
+
+
+        #bottom-tab {
+            background-color: #574972;
+            color: #fff;
+            padding: 0px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #remove-mark-button {
+            background-color: #574972;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #toggle-left-tab-button span {
+            width: 30px;
+            height: 3px;
+            background-color: #fff;
+            display: block;
+            margin: 6px 0;
+        }
+
+        #tab-container {
+            position: absolute;
+            top: 11%;
+            left: 0;
+            background-color: rgba(87, 73, 114, 1);
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 92%;
+            width: 15%; /* Adjusted width to make it wider */
+            transition: left 0.5s;
+            opacity: 1;
+        }
+
+        #tab-container .profile-picture {
+            width: 200px; /* Adjusted size to make it 80% smaller */
+            height: 200px; /* Adjusted size to make it 80% smaller */
+            border-radius: 70%;
+            margin-bottom: 10px;
+            top: 132px;
+            background: url('background.jpg') center/cover; /* Added background property */
+        }
+
+        #tab-container .profile-line {
+            width: calc(160% + 40px); /* Adjusted width and margin to extend the line */
+            height: 1px;
+            background-color: #fff;
+            margin-bottom: 10px;
+            margin-left: -126px; /* Adjusted margin-left to extend within the left tab */
+        }
+
+        #tab-container .tab {
+            background-color: #574972;
+            color: #fff;
+            padding: 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .right-tab {
+            background-color: #574972;
+            color: #fff;
+            padding: 5px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        #right-tab-container {
+            /* Adjust top and right properties to position the container */
+            position: absolute;
+            top: 30%; /* You can change this value to set the desired top position */
+            right: 0; /* You can change this value to set the desired right position */
+            background-color: rgba(87, 73, 114, 1);
+            color: #fff;
+            padding: 10px;
+            /* Adjust width and height properties to set the size of the container */
+            width: 10%; /* You can change this value to set the desired width */
+            height: 10%; /* You can change this value to set the desired height */
+            border-radius: 50px;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: right 0.5s;
+            opacity: 1;
+        }
+        .right-tab.show {
+            display: block;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            width: 200px;
+        }
+
+        li a {
+            display: block;
+            color: #000;
+            padding: 10px 35px;
+            text-decoration: none;
+        }
+
+        li a:hover {
+            background-color: #555;
+            color: white;
+        }
+
+        #loogo img {
+            position: absolute;
+            margin-top: 5px;
+            margin-left: 10px;
+            height: 10%;
+            width: 15%;
+        }
+
+        #sign img {
+            position: absolute;
+            height: 6%;
+            width: 10%;
+            top: 34%;
+        }
+        
+
+        #sign1 img {
+            position: absolute;
+            height: 6%;
+            width: 10%;
+            top: 47.5%;
+        }
+
+        #sign2 img {
+            position: absolute;
+            height: 6%;
+            width: 10%;
+            top: 60.5%;
+        }
+
+        .marker-image {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        #sign3 img {
+            position: absolute;
+            height: 6%;
+            width: 10%;
+            top: 86%;
+        }
+    
+
+#marker-selection {
+    margin-bottom: 10px;
+}
+
+#marker-display {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+#marker-images-container {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.marker-image-preview {
+    width: 5a0px; /* You can change this value to set the desired width in pixels */
+    height: 70px; /* You can change this value to set the desired height in pixels */
+    border-radius: 50%;
+    margin-right: 5px;
+}
+#usog {
+ margin-left: 40px;
+ position: absolute;
+top:88%;
+color: black;
+  text-decoration: none;
+  display: block;
+}
+
+#usog a {
+            display: block;
+            color: #000;
+            padding: 10px 35px;
+            text-decoration: none;
+}   
+#usog a:hover {
+            background-color: #555;
+            color: white;
+}
+
+    
+        .custom-marker-image {
+            width: 500px; /* You can change this value to set the desired width in pixels */
+            height: 500px; /* You can change this value to set the desired height in pixels */
+        }
+.dropbtn {
+  background-color: rgba(87, 73, 114, 1);
+  color: black;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+margin-left: 20px;
+top:88%;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: rgba(87, 73, 114, 1);
+  min-width: 160px;
+  box-shadow: rgba(87, 73, 114, 1);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color:  rgba(90, 73, 189, 0.91);}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: rgba(87, 73, 114, 1);
+}
+</style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+</head>
+
+<body>
+    <div id="loogo">
+        <img src="logiofsite.png">
+        <br>
+    </div>
+
+    <div class="top-search-container">
+        <input type="text" placeholder="Search Location" id="search-input-top">
+        <div class="autocomplete-dropdown" id="autocomplete-dropdown"></div>
+   <!-- Update the onclick attribute of the "Remove a mark" button -->
+   <button id="remove-mark-button" onclick="removeMarkersAndLocalStorage()">Remove a mark</button>
+
+    </div>
+
+
+    <div id="map-container">
+        <div id="map"></div>
+    </div>
+
+    <div id="bottom-tab-container">
+        <div id="bottom-tab"></div>
+        <!-- Add the button for Gmail redirection with an image -->
+        <button id="gmail-button" onclick="redirectToGmail()">
+            <img src="B1-2.png" alt="Gmail" style="width: 30px; height: 30px;">
+        </button>
+    </div>
+    
+
+
+    <div id="tab-container" onclick="toggleTab()">
+        <div class="tab" id="tab1">Tab 1</div>
+        <div class="tab" id="tab2">Tab 2</div>
+        <div class="tab" id="tab3">Tab 3</div>
+
+        <div class="profile-container">
+            <img class="profile-picture" src="profile.png" alt="Profile Picture">
+            <div class="profile-line"></div>
+            <div class="horizontal-line"></div>
+
+            <ul>
+                <li><a href=>Already Premium</a></li>
+                <br>
+                <hr><br>
+
+                <li><a href="mailto:pingstidasma@gmail.com">Food Donations</a></li>
+                <br><br>
+                <hr>
+            <div class="dropdown" style="float:left;">
+  <button class="dropbtn">Setiings</button>
+  <div class="dropdown-content" style="left:0;">
+  <a href="index.html">Log Out</a>
+  </div>
+</div>
+            <br><br><br><br><br><br><br><br>
+
+              
+
+                <div class="profile-line"></div>
+                <div class="horizontal-line"></div>
+                <br><br>
+                <a id="usog"href="mailto:pingstidasma@gmail.com" target="_blank">Help and Feedback</a>
+                <div id="sign3">
+                    <img src="LT4info.png">
+                </div>
+                <div id="sign">
+                    <img src="LT1premium.png">
+                </div>
+                <div id="sign1">
+                    <img src="LT2fooddonate.png">
+                </div>
+                <div id="sign2">
+                    <img src="LT3settings.png">
+                </div>
+            </ul>
+        </div>
+    </div>
+    <div id="right-tab-container" style="width: 200px; height: 245px;">
+        <select id="marker-selection">
+            <option value="Rbook.png">Rbook.png</option>
+            <option value="Rclothes.png">Rclothes.png</option>
+            <option value="Rfood.png">Rfood.png</option>
+        </select>
+
+        <label for="book-status">Book Status:</label>
+        <input type="text" id="book-status">
+
+        <label for="clothes-status">Clothes Status:</label>
+        <input type="text" id="clothes-status">
+
+        <label for="food-status">Food Status:</label>
+        <input type="text" id="food-status">
+
+        <button id="toggle-place-marker-button">Toggle Place Marker</button>
+
+        <div id="marker-images-container">
+            <img src="Rbook.png" alt="Marker 1" class="marker-image-preview">
+            <img src="Rclothes.png" alt="Marker 2" class="marker-image-preview">
+            <img src="Rfood.png" alt="Marker 3" class="marker-image-preview">
+        </div>
+    </div>
+
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+
+
+    <script>
+          var map;
+        var churchCoordinates = [14.3290, 120.9360];
+        var markers = L.markerClusterGroup();
+        var placeMarkerMode = false;
+        var selectedMarker;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initMap();
+            loadMarkersFromLocalStorage();
+            loadUserInputsFromLocalStorage();
+             document.getElementById('toggle-place-marker-button').addEventListener('click', function () {
+                togglePlaceMarker();
+            });
+        });
+        var allowedLocations = ['Dasmarinas', 'Imus', 'Bacoor'];
+
+        var searchInput = document.getElementById('search-input-top');
+        var autocompleteDropdown = document.getElementById('autocomplete-dropdown');
+
+        searchInput.addEventListener('input', function () {
+            var inputValue = searchInput.value.toLowerCase();
+            var suggestions = [];
+
+            allowedLocations.forEach(function (location) {
+                if (location.toLowerCase().includes(inputValue)) {
+                    suggestions.push(location);
+                }
+            });
+
+            displayAutofillSuggestions(suggestions);
+        });
+        function removeMarkersAndLocalStorage() {
+    // Remove all markers from the map
+    markers.clearLayers();
+
+
+    // Clear data from local storage
+    localStorage.removeItem('markers');
+    // Add more keys to remove if needed
+}
+
+        function displayAutofillSuggestions(suggestions) {
+            autocompleteDropdown.innerHTML = '';
+
+            if (suggestions.length > 0) {
+                autocompleteDropdown.style.display = 'block';
+
+                suggestions.forEach(function (suggestion) {
+                    var suggestionItem = document.createElement('div');
+                    suggestionItem.className = 'autocomplete-item';
+                    suggestionItem.textContent = suggestion;
+
+                    suggestionItem.addEventListener('click', function () {
+                        searchInput.value = suggestion;
+                        autocompleteDropdown.style.display = 'none';
+                        showLocationOnMap(suggestion);
+                    });
+
+                    autocompleteDropdown.appendChild(suggestionItem);
+                });
+            } else {
+                autocompleteDropdown.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('click', function (event) {
+            if (!event.target.matches('#search-input-top')) {
+                autocompleteDropdown.style.display = 'none';
+            }
+        });
+
+        function showLocationOnMap(location) {
+            var coordinates = getCoordinatesForLocation(location);
+            if (coordinates) {
+                map.setView(coordinates, 15);
+            }
+        }
+
+        function getCoordinatesForLocation(location) {
+    switch (location.toLowerCase()) {
+        case 'dasmarinas':
+            return [14.3290, 120.9360];
+        case 'imus':
+            return [14.4294, 120.9386]; // Replace with actual coordinates for Imus
+        case 'bacoor':
+            return [14.4590, 120.9577]; // Replace with actual coordinates for Bacoor
+        default:
+            return null;
+    }
+}
+
+
+function initMap() {
+            map = L.map('map', {
+            center: churchCoordinates,
+            zoom: 15,
+            minZoom: 15,
+            maxBounds: L.latLngBounds(
+                L.latLng(14.4106, 120.9190),
+                L.latLng(14.2454, 121.0141)
+            )
+        });
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        map.addLayer(markers);
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'g' || event.key === 'G') {
+                map.setView(churchCoordinates, 15);
+            }
+        });
+
+        map.on('click', function (e) {
+        if (placeMarkerMode) {
+            var selectedMarker = document.getElementById('marker-selection');
+            var selectedImageSrc = selectedMarker.value;
+
+            var marker = L.marker(e.latlng, {
+                icon: L.divIcon({
+                    className: 'leaflet-div-icon',
+                    html: '<img src="' + selectedImageSrc + '" alt="Marker" class="marker-image">'
+                })
+            });
+
+            marker.on('click', function () {
+                showMarkerStatus(selectedImageSrc);
+            });
+
+            markers.addLayer(marker);
+            togglePlaceMarker();
+            saveMarkerToLocalStorage(e.latlng, selectedImageSrc);
+        }
+            });
+        }
+        
+        function saveMarkerToLocalStorage(latlng, imageSrc) {
+            var savedMarkers = JSON.parse(localStorage.getItem('markers')) || [];
+            savedMarkers.push({ latlng: latlng, imageSrc: imageSrc });
+            localStorage.setItem('markers', JSON.stringify(savedMarkers));
+        }
+        
+
+
+        function togglePlaceMarker() {
+    placeMarkerMode = !placeMarkerMode;
+    if (!placeMarkerMode && selectedMarker) {
+        saveUserInputsToLocalStorage();
+        var selectedImageSrc = document.getElementById('marker-selection').value;
+        var status = getStatusForImage(selectedImageSrc);
+        saveMarkerToLocalStorage(selectedMarker._latlng, selectedImageSrc);  
+      }
+}
+function saveUserInputsToLocalStorage() {
+            var bookStatus = document.getElementById('book-status').value;
+            var clothesStatus = document.getElementById('clothes-status').value;
+            var foodStatus = document.getElementById('food-status').value;
+
+            var userInputs = {
+                bookStatus: bookStatus,
+                clothesStatus: clothesStatus,
+                foodStatus: foodStatus
+            };
+
+            localStorage.setItem('userInputs', JSON.stringify(userInputs));
+        }
+
+        function loadUserInputsFromLocalStorage() {
+            var storedUserInputs = localStorage.getItem('userInputs');
+
+            if (storedUserInputs) {
+                var userInputs = JSON.parse(storedUserInputs);
+
+                document.getElementById('book-status').value = userInputs.bookStatus || '';
+                document.getElementById('clothes-status').value = userInputs.clothesStatus || '';
+                document.getElementById('food-status').value = userInputs.foodStatus || '';
+            }
+        }
+
+        function removeSelectedMarker() {
+            if (selectedMarker) {
+                // Remove the selected marker from the map
+                markers.removeLayer(selectedMarker);
+
+                // Remove the selected marker from local storage
+                var savedMarkers = JSON.parse(localStorage.getItem('markers')) || [];
+                savedMarkers = savedMarkers.filter(function (marker) {
+                    return !marker.latlng.equals(selectedMarker._latlng);
+                });
+                localStorage.setItem('markers', JSON.stringify(savedMarkers));
+
+                // Reset the selected marker
+                selectedMarker = null;
+
+                // Remove the remove button and Gmail button from the bottom tab
+                var bottomTabContainer = document.getElementById('bottom-tab-container');
+           
+                var gmailButton = document.querySelector('.gmail-button');
+
+               
+                if (gmailButton) {
+                    bottomTabContainer.removeChild(gmailButton);
+                }
+            }
+        }
+        function redirectToGmail() {
+        window.location.href = 'mailto:pingstidasma@gmail.com';
+        
+    }
+    function saveMarkerToLocalStorage(latlng, imageSrc, status) {
+    var savedMarkers = JSON.parse(localStorage.getItem('markers')) || [];
+    savedMarkers.push({ latlng: latlng, imageSrc: imageSrc, status: status });
+    localStorage.setItem('markers', JSON.stringify(savedMarkers));
+}
+function loadMarkersFromLocalStorage() {
+    var savedMarkers = JSON.parse(localStorage.getItem('markers')) || [];
+    savedMarkers.forEach(function (marker) {
+        var latlng = marker.latlng;
+        var imageSrc = marker.imageSrc;
+        var status = marker.status;
+
+        var loadedMarker = L.marker(latlng, {
+            icon: L.divIcon({
+                className: 'leaflet-div-icon',
+                html: '<img src="' + imageSrc + '" alt="Marker" class="marker-image">'
+            })
+        });
+
+        loadedMarker.on('click', function () {
+            showMarkerStatus(imageSrc, status);
+        });
+
+        markers.addLayer(loadedMarker);
+    });
+}
+function showMarkerStatus(markerImageSrc, status) {
+    var markerStatus;
+
+    switch (markerImageSrc) {
+        case 'Rbook.png':
+            markerStatus = document.getElementById('book-status').value || 'Default Book Status';
+            break;  
+        case 'Rclothes.png':
+            markerStatus = document.getElementById('clothes-status').value || 'Default Clothes Status';
+            break;
+        case 'Rfood.png':
+            markerStatus = document.getElementById('food-status').value || 'Default Food Status';
+            break;
+        default:
+            markerStatus = 'Unknown Marker';
+    }
+    // Display marker status in the bottom tab
+ // Display marker status in the bottom tab
+ document.getElementById('bottom-tab').innerText = markerStatus;
+
+// Add the removal button after the status
+var removeButton = document.createElement('button');
+removeButton.id = 'remove-mark-button';
+removeButton.innerText = 'Remove a mark';
+bottomTabContainer.appendChild(removeButton);
+
+// Insert the button after the status
+var bottomTabContainer = document.getElementById('bottom-tab-container');
+bottomTabContainer.appendChild(removeButton);
+
+// Add the hyperlink button after the removal button
+var gmailButton = document.createElement('a');
+gmailButton.href = 'https://www.gmail.com'; // Replace with your desired URL
+gmailButton.target = '_blank'; // Open in a new tab
+gmailButton.innerHTML = '<img src="B1-2.png" alt="Gmail" style="width: 30px; height: 30px;">'; // Replace with the correct image path and styling
+gmailButton.className = 'gmail-button';
+
+// Insert the button after the removal button
+bottomTabContainer.appendChild(gmailButton);
+
+// Set the selected marker for removal
+selectedMarker = markers.getLayers().find(function (layer) {
+    return layer._latlng.equals(selectedMarker._latlng);
+});
+}
+</script>
+</body>
+
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: 'DM Sans', Arial, sans-serif;
+            background: url('bglogin.png') no-repeat center center fixed;
+            background-size: cover;
+            text-align: center;
+            margin: 30px 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: #fff;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        input {
+            width: 80%;
+            max-width: 300px;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .login-button, .sign-up-button {
+            width: 50%;
+            max-width: 150px;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .login-button {
+            background-color: #4caf50;
+            color: #fff;
+            margin-right: 5px;
+        }
+
+        .sign-up-button {
+            background-color: #2196F3;
+            color: #fff;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 15px;
+        }
+
+        .logo {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: -30px;
+        }
+
+        .sign-up-message {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        .sign-up-link {
+            text-decoration: none;
+        }
+    </style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap">
+</head>
+<body>
+    <img class="logo" src="logiofsite.png" alt="logiofsite">
+    <h2>Login</h2>
+    <form onsubmit="return login()">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <div class="button-container">
+            <button type="submit" class="login-button">Login</button>
+            <a href="free.html" class="sign-up-button">Sign in as Guess!</a>
+        </div>
+
+        <div id="error-message" class="error-message"></div>
+
+        <p class="sign-up-message">Sign up for free! (Please Click the "Be a premium User")</p>
+        <div class="button-container">
+          
+            <!-- Link to the sign-up page using a proper URL -->
+        </div>
+    </form>
+
+    <script>
+        function login() {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            // Hardcoded default account
+            var validUsers = [
+                { username: 'User1', password: 'pRJGUyvuha' },
+                { username: 'User2', password: 'tbyYORbC1i' },
+                { username: 'User3', password: 'uWMSv81H5K' },
+                { username: 'User4', password: 'c6RRPVAh1H' },
+                { username: 'User5', password: 'nLX2x980T3' },
+                { username: 'User6', password: 'S6kRAkX9y7' },
+
+
+                // Add more users as needed
+            ];
+
+            // Check if the entered credentials match any valid user
+            var validUser = validUsers.find(user => user.username === username && user.password === password);
+
+            if (validUser) {
+                window.location.href = 'main.html?username=' + encodeURIComponent(username);
+                return false;
+            } else {
+                document.getElementById('error-message').innerText = 'Invalid username or password';
+                return false;
+            }
+        }
+    </script>
+</body>
+</html>
